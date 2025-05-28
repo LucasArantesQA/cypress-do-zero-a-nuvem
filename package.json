@@ -27,6 +27,6 @@
     "cypress-do-zero-a-nuvem": "file:"
   },
   "devDependencies": {
-    "cypress": "^13.12.0"
+    "cypress": "^13.17.0"
   }
 }

@@ -50,7 +50,29 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#phone-checkbox').click()
     cy.get('button[type="submit"]').click()
     cy.get('.error').should('be.visible')
-
    })
+
+   //Lista 3 -  Exercício  1
+   it.only('Seleciona um produto (YouTube) por seu texto', () => {
+    cy.get('#product')
+      .select('YouTube')
+      .should('have.value', 'youtube')
+   })
+
+    //Lista 3 -  Exercício extra 1
+    it('Seleciona um produto (Mentoria) por seu valor (value)', () => {
+      cy.get('#product')
+        .select('mentoria')
+        .should('have.value', 'mentoria')
+    } 
+    )
+    //Lista 3 -  Exercício extra 2
+    it('Seleciona um produto (Blog) por seu índice', () => {
+      cy.get('#product')
+        .select(1)
+        .should('have.value', 'blog')
+    })    
+
+   
 
 })
