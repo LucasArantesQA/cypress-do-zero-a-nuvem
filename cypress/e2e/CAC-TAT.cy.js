@@ -88,7 +88,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
   });
 
   // Exercício extra 8
-  it.only("Envia o formuário com sucesso buscado seletor por contéudo textual", () => {
+  it("Envia o formuário com sucesso buscado seletor por contéudo textual", () => {
     cy.fillMandatoryField();
     cy.contains("button", "Enviar").click();
     cy.get(".success").should("be.visible");
@@ -117,7 +117,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
   });
 
   //Lista 4 -  Exercício extra 2
-  it.only("Marca cada tipo de atendimento", () => {
+  it("Marca cada tipo de atendimento", () => {
     cy.get("#support-type input").each(($radio, index, $list) => {
       cy.wrap($radio).check().should("be.checked");
       if (index > 0) {
@@ -125,4 +125,39 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       }
     });
   });
+
+  // Lista 5 - Exercício 
+  it("Marca ambos checkboxes, depois desmarca o último", () => {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should("be.checked")
+      .last()
+      .uncheck()
+      .should("not.be.checked");
+  });
+
+  // Lista 5 - Exercício extra 1
+  it("Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
+
+    cy.get('#phone-checkbox')
+      .check()
+    cy.fillMandatoryFieldAndSubmit();
+    cy.get('.error').should('be.visible')
+  });
+
+  // Lista 6 - Exercício 
+  it("Seleciona um arquivo da pasta fixture", () =>{
+    const fileName = 'example.json'
+    cy.get('#file-upload')
+    .selectFile(`cypress/fixtures/${fileName}`)
+    .should(input => {
+    expect(input[0].files[0].name).to.equal(fileName)
+    })
+  })
+
+  // Lista 6 - Exercício v2
+  it.only("Seleciona um arquivo da pasta fixture", () =>{
+    cy.uploadFileAndCheck("#file-upload", "cypress/fixtures/example.json")
+  })
+
 });
