@@ -1,15 +1,7 @@
 describe("Central de Atendimento ao Cliente TAT", () => {
   const validEmail = "email@valido.com";
   const invalidEmail = "email-invalido.com";
-
-  const inputForm = (email) => {
-    const longText = Cypress._.repeat("Lorem Ipsum ", 10);
-
-    cy.get("#firstName").type("First");
-    cy.get("#lastName").type("Last");
-    cy.get("#email").type(email);
-    cy.get("#open-text-area").type(longText, { delay: 0 });
-  };
+  const longText = Cypress._.repeat("Lorem Ipsum ", 10);
 
   beforeEach(() => {
     cy.visit("./src/index.html");
@@ -20,14 +12,17 @@ describe("Central de Atendimento ao Cliente TAT", () => {
   });
 
   it("Preenche os campos obrigatórios e envia o formulário", () => {
-    inputForm(validEmail);
+    cy.fillMandatoryField();
     cy.get('button[type="submit"]').click();
     cy.get(".success").should("be.visible");
   });
 
   // Exercício extra 2
   it("Exibe mensagem de erro ao submeter o formulário com um email com formatação inválida", () => {
-    inputForm(invalidEmail);
+    const data = {
+      email: invalidEmail,
+    };
+    cy.fillMandatoryField(data);
     cy.get('button[type="submit"]').click();
     cy.get(".error").should("be.visible");
   });
@@ -39,10 +34,64 @@ describe("Central de Atendimento ao Cliente TAT", () => {
 
   // Exercício extra 4
   it("Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
-    inputForm(validEmail);
+    cy.fillMandatoryField();
     cy.get("#phone-checkbox").click();
     cy.get('button[type="submit"]').click();
     cy.get(".error").should("be.visible");
+  });
+
+  // Exercício extra 5
+  it("Preenche e limpa os campos nome, sobrenome, email e telefone", () => {
+    cy.get("#firstName")
+      .type("First")
+      .should("have.value", "First")
+      .clear()
+      .should("have.value", "");
+    cy.get("#lastName")
+      .type("Last")
+      .should("have.value", "Last")
+      .clear()
+      .should("have.value", "");
+    cy.get("#email")
+      .type("teste@gmail.com")
+      .should("have.value", "teste@gmail.com")
+      .clear()
+      .should("have.value", "");
+    cy.get("#open-text-area")
+      .type(longText, { delay: 0 })
+      .should("have.value", longText)
+      .clear()
+      .should("have.value", "");
+    cy.get("#phone")
+      .type("a1b2c3d4")
+      .should("have.value", "1234")
+      .clear()
+      .should("have.value", "");
+  });
+
+  // Exercício extra 6
+  it("Exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios", () => {
+    cy.get('button[type="submit"]').click();
+    cy.get(".error").should("be.visible");
+  });
+
+  // Exercício extra 7
+  it("Envia o formuário com sucesso usando um comando customizado", () => {
+    const data = {
+      firstName: "User",
+      lastName: "Teste",
+      email: validEmail,
+      text: longText,
+    };
+    cy.fillMandatoryFieldAndSubmit(data);
+    cy.get(".success").should("be.visible");
+  });
+
+  // Exercício extra 8
+  it.only("Envia o formuário com sucesso buscado seletor por contéudo textual", () => {
+    cy.fillMandatoryField();
+    cy.contains("button", "Enviar").click();
+    cy.get(".success").should("be.visible");
   });
 
   //Lista 3 -  Exercício  1
