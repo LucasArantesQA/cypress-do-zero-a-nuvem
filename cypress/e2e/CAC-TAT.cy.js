@@ -126,7 +126,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     });
   });
 
-  // Lista 5 - Exercício 
+  // Lista 5 - Exercício
   it("Marca ambos checkboxes, depois desmarca o último", () => {
     cy.get('input[type="checkbox"]')
       .check()
@@ -138,26 +138,43 @@ describe("Central de Atendimento ao Cliente TAT", () => {
 
   // Lista 5 - Exercício extra 1
   it("Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
-
-    cy.get('#phone-checkbox')
-      .check()
+    cy.get("#phone-checkbox").check();
     cy.fillMandatoryFieldAndSubmit();
-    cy.get('.error').should('be.visible')
+    cy.get(".error").should("be.visible");
   });
 
-  // Lista 6 - Exercício 
-  it("Seleciona um arquivo da pasta fixture", () =>{
-    const fileName = 'example.json'
-    cy.get('#file-upload')
-    .selectFile(`cypress/fixtures/${fileName}`)
-    .should(input => {
-    expect(input[0].files[0].name).to.equal(fileName)
-    })
-  })
+  // Lista 6 - Exercício
+  it("Seleciona um arquivo da pasta fixture", () => {
+    const fileName = "example.json";
+    cy.get("#file-upload")
+      .selectFile(`cypress/fixtures/${fileName}`)
+      .should((input) => {
+        expect(input[0].files[0].name).to.equal(fileName);
+      });
+  });
 
   // Lista 6 - Exercício v2
-  it.only("Seleciona um arquivo da pasta fixture", () =>{
-    cy.uploadFileAndCheck("#file-upload", "cypress/fixtures/example.json")
-  })
+  it("Seleciona um arquivo da pasta fixture", () => {
+    cy.uploadFileAndCheck("#file-upload", "cypress/fixtures/example.json");
+  });
 
+  // Lista 6 - Exercício extra 1
+  it("Seleciona um arquivo simulando um drag-and-drop", () => {
+    const fileName = "example.json";
+    cy.get("#file-upload")
+      .selectFile(`cypress/fixtures/${fileName}`, { action: "drag-drop" })
+      .should((input) => {
+        expect(input[0].files[0].name).to.equal(fileName);
+      });
+  });
+
+  // Lista 6 - Exercício extra 1
+  it.only("Seleciona um arquivo utilizando uma fixture para a qual foi dada um alias", () => {
+    cy.fixture("example.json").as("sampleFile")
+    cy.get("#file-upload")
+    .selectFile("@sampleFile")
+    .should((input) => {
+        expect(input[0].files[0].name).to.equal("example.json");
+      });
+  });
 });
