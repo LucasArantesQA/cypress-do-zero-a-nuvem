@@ -195,8 +195,8 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       .should("have.text", "CAC TAT - Política de Privacidade");
   })
 
-  // Lista 12 - Exercício extra 2 - Desafio
-  it.only("Confere se a mensagem de 'Valide os campos obrigatórios!' desaparece apóss 3 segundos", () => {
+  // Lista 12 - Exercício part 1 
+  it("Confere se a mensagem de 'Valide os campos obrigatórios!' desaparece apóss 3 segundos", () => {
     cy.clock()
 
     cy.get('button[type="submit"]').click();
@@ -209,8 +209,8 @@ describe("Central de Atendimento ao Cliente TAT", () => {
 
   });
 
-  // Lista 12 - Exercício extra 2 - Desafio
-  it.only("Confere se a mensagem de Sucesso desaparece apóss 3 segundos", () => {
+  // Lista 12 - Exercício part 2 
+  it("Confere se a mensagem de Sucesso desaparece apóss 3 segundos", () => {
     cy.clock()
 
     cy.fillMandatoryFieldAndSubmit()
@@ -221,6 +221,33 @@ describe("Central de Atendimento ao Cliente TAT", () => {
 
   });
 
+  // Lista 12 - Exercício extra 1 
+  it.only("Executa o mesmo teste várias vezes para verificar a estabilidade", () => {
+
+    Cypress._.times(3, () => {
+      cy.fillMandatoryFieldAndSubmit()
+      cy.get(".success").should("not.be.visible");
+    })
+  });
+
+
+  // Lista 12 - Exercício extra 2
+  it.only('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide')
+      .should('not.be.visible')
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
 });
 
 describe("Página de Política de Privacidade", () => {
