@@ -172,46 +172,73 @@ describe("Central de Atendimento ao Cliente TAT", () => {
   it("Seleciona um arquivo utilizando uma fixture para a qual foi dada um alias", () => {
     cy.fixture("example.json").as("sampleFile")
     cy.get("#file-upload")
-    .selectFile("@sampleFile")
-    .should((input) => {
+      .selectFile("@sampleFile")
+      .should((input) => {
         expect(input[0].files[0].name).to.equal("example.json");
       });
   });
 
   // Lista 7 - Exercício 
-  it("Verifica que a política de privacidade abre em outra aba sem a necessidade de um clique", () =>{
+  it("Verifica que a política de privacidade abre em outra aba sem a necessidade de um clique", () => {
     cy.get('#privacy > a')
-    .should('have.attr', 'target', '_blank')
-    .and('have.attr', 'href', 'privacy.html')
+      .should('have.attr', 'target', '_blank')
+      .and('have.attr', 'href', 'privacy.html')
   })
 
   // Lista 7 - Exercício extra 1
-  it("Acessa a página da política de privacidade removendo o target e então clicando no link", () =>{
+  it("Acessa a página da política de privacidade removendo o target e então clicando no link", () => {
     cy.get('#privacy > a')
-    .invoke('removeAttr', 'target')
-    .click()
+      .invoke('removeAttr', 'target')
+      .click()
 
     cy.get("#title")
-    .should("have.text", "CAC TAT - Política de Privacidade"); 
-  } )
+      .should("have.text", "CAC TAT - Política de Privacidade");
+  })
 
+  // Lista 12 - Exercício extra 2 - Desafio
+  it.only("Confere se a mensagem de 'Valide os campos obrigatórios!' desaparece apóss 3 segundos", () => {
+    cy.clock()
+
+    cy.get('button[type="submit"]').click();
+    cy.get(".error").should("be.visible");
+
+    cy.tick(3000)
+
+
+    cy.get(".error").should("not.be.visible");
+
+  });
+
+  // Lista 12 - Exercício extra 2 - Desafio
+  it.only("Confere se a mensagem de Sucesso desaparece apóss 3 segundos", () => {
+    cy.clock()
+
+    cy.fillMandatoryFieldAndSubmit()
+    cy.tick(3000)
+
+
+    cy.get(".success").should("not.be.visible");
+
+  });
 
 });
 
 describe("Página de Política de Privacidade", () => {
-  
+
   beforeEach(() => {
-    cy.visit("./src/privacy.html"); 
+    cy.visit("./src/privacy.html");
   });
 
-    // Lista 7 - Exercício extra 2 - Desafio
+  // Lista 7 - Exercício extra 2 - Desafio
   it("Testa a página da política de privacidade de forma independente", () => {
     cy.contains("h1", "CAC TAT - Política de Privacidade")
-    .should("be.visible"); 
+      .should("be.visible");
 
-    cy.contains("p" , "Talking About Testing")
-    .should("be.visible")
+    cy.contains("p", "Talking About Testing")
+      .should("be.visible")
   });
 
-
 });
+
+
+
